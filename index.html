@@ -20,14 +20,29 @@
       margin: 0 auto;
     }
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 5px;
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
     }
-    select, input[type="checkbox"] {
+    .preference-button {
+      padding: 10px 20px;
+      background-color: #ddd;
+      color: #333;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    .preference-button.selected {
+      background-color: #A17E89;
+      color: white;
+    }
+    select {
       width: 100%;
       padding: 10px;
       margin-bottom: 10px;
@@ -52,12 +67,13 @@
       color: gray;
     }
     button {
-      padding: 10px 20px;
+      padding: 5px 10px;
       background-color: #A17E89;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      font-size: 12px;
     }
     button:hover {
       background-color: #8c6375;
@@ -80,30 +96,14 @@
       </select>
     </div>
     <div class="form-group">
-      <label>What are your interests? (Select multiple)</label>
-      <div>
-        <input type="checkbox" id="wellness" value="Wellness">
-        <label for="wellness">Wellness</label>
-      </div>
-      <div>
-        <input type="checkbox" id="fitness" value="Fitness">
-        <label for="fitness">Fitness</label>
-      </div>
-      <div>
-        <input type="checkbox" id="beauty" value="Beauty">
-        <label for="beauty">Beauty</label>
-      </div>
-      <div>
-        <input type="checkbox" id="relaxation" value="Relaxation">
-        <label for="relaxation">Relaxation</label>
-      </div>
-      <div>
-        <input type="checkbox" id="nutrition" value="Nutrition">
-        <label for="nutrition">Nutrition</label>
-      </div>
-      <div>
-        <input type="checkbox" id="development" value="Personal Development">
-        <label for="development">Personal Development</label>
+      <label>What are your interests?</label>
+      <div class="button-group" id="preference-buttons">
+        <button class="preference-button" data-value="Wellness">Wellness</button>
+        <button class="preference-button" data-value="Fitness">Fitness</button>
+        <button class="preference-button" data-value="Beauty">Beauty</button>
+        <button class="preference-button" data-value="Relaxation">Relaxation</button>
+        <button class="preference-button" data-value="Nutrition">Nutrition</button>
+        <button class="preference-button" data-value="Personal Development">Personal Development</button>
       </div>
     </div>
     <button id="generate-activities">Generate Activities</button>
@@ -144,17 +144,27 @@
       ],
     };
 
-    document.getElementById("generate-activities").addEventListener("click", () => {
+    const preferenceButtons = document.querySelectorAll(".preference-button");
+    const generateButton = document.getElementById("generate-activities");
+    const activityList = document.getElementById("activity-list");
+
+    // Seleziona e deseleziona i pulsanti delle preferenze
+    preferenceButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        button.classList.toggle("selected");
+      });
+    });
+
+    generateButton.addEventListener("click", () => {
       const timeAvailable = parseInt(document.getElementById("time").value, 10);
       const selectedInterests = Array.from(
-        document.querySelectorAll('input[type="checkbox"]:checked')
-      ).map((checkbox) => checkbox.value);
+        document.querySelectorAll(".preference-button.selected")
+      ).map((button) => button.dataset.value);
 
       const filteredActivities = selectedInterests
         .flatMap((interest) => activities[interest])
         .filter((activity) => activity.time <= timeAvailable);
 
-      const activityList = document.getElementById("activity-list");
       activityList.innerHTML = ""; // Clear previous activities
 
       let totalTime = 0;
