@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activity Planner</title>
+  <title>Personalized Routine Generator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,184 +12,199 @@
       background-color: #f9f9f9;
       color: #333;
     }
-    h1 {
+    h1, h2 {
       text-align: center;
     }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
+    .preferences, .result {
+      margin: 20px 0;
     }
-    .form-group {
-      margin-bottom: 20px;
+    .preferences button {
+      margin: 5px;
+      padding: 10px 20px;
+      border: none;
+      background-color: #ddd;
+      border-radius: 5px;
+      cursor: pointer;
     }
-    .button-group {
+    .preferences button.selected {
+      background-color: #A17E89;
+      color: white;
+    }
+    .time-selection {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
       justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
     }
-    .preference-button {
+    .time-selection button {
       padding: 10px 20px;
+      border: none;
       background-color: #ddd;
-      color: #333;
-      border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 14px;
-      transition: background-color 0.3s;
     }
-    .preference-button.selected {
+    .time-selection button.selected {
       background-color: #A17E89;
       color: white;
     }
-    select {
-      width: 100%;
-      padding: 10px;
+    .result-list {
+      list-style: none;
+      padding: 0;
+    }
+    .result-list li {
       margin-bottom: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
-    .activity-list {
-      margin-top: 20px;
-    }
-    .activity {
-      padding: 10px;
-      margin-bottom: 10px;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .activity.completed {
-      text-decoration: line-through;
-      color: gray;
-    }
-    button {
-      padding: 5px 10px;
-      background-color: #A17E89;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-    button:hover {
-      background-color: #8c6375;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
-  <h1>Activity Planner</h1>
-  <div class="container">
-    <div class="form-group">
-      <label for="time">How much time do you have?</label>
-      <select id="time">
-        <option value="5">5 minutes</option>
-        <option value="10">10 minutes</option>
-        <option value="15">15 minutes</option>
-        <option value="20">20 minutes</option>
-        <option value="30">30 minutes</option>
-        <option value="45">45 minutes</option>
-        <option value="60">1 hour</option>
-      </select>
+  <h1>Personalized Routine Generator</h1>
+  
+  <div class="preferences">
+    <h2>Select Your Preferences</h2>
+    <div id="preferences-container">
+      <button data-category="wellness">Wellness</button>
+      <button data-category="nutrition">Nutrition</button>
+      <button data-category="self-care">Self-care</button>
+      <button data-category="beauty">Beauty</button>
+      <button data-category="personal-dev">Personal Development</button>
     </div>
-    <div class="form-group">
-      <label>What are your interests?</label>
-      <div class="button-group" id="preference-buttons">
-        <button class="preference-button" data-value="Wellness">Wellness</button>
-        <button class="preference-button" data-value="Fitness">Fitness</button>
-        <button class="preference-button" data-value="Beauty">Beauty</button>
-        <button class="preference-button" data-value="Relaxation">Relaxation</button>
-        <button class="preference-button" data-value="Nutrition">Nutrition</button>
-        <button class="preference-button" data-value="Personal Development">Personal Development</button>
-      </div>
-    </div>
-    <button id="generate-activities">Generate Activities</button>
-    <div class="activity-list" id="activity-list"></div>
+  </div>
+
+  <div class="time-selection">
+    <h2>Select Your Available Time</h2>
+    <button data-time="5">5 Min</button>
+    <button data-time="10">10 Min</button>
+    <button data-time="15">15 Min</button>
+    <button data-time="20">20 Min</button>
+    <button data-time="25">25 Min</button>
+    <button data-time="30">30 Min</button>
+    <button data-time="60">1 Hour</button>
+    <button data-time="90">1.5 Hours</button>
+    <button data-time="120">2 Hours</button>
+  </div>
+
+  <div class="result">
+    <h2>Your Routine</h2>
+    <ul class="result-list" id="routine-list"></ul>
   </div>
 
   <script>
-    const activities = {
-      Wellness: [
-        { name: "Sunshine exposure", time: 10, multitask: true },
-        { name: "Bouncing", time: 2 },
-        { name: "Oil pulling", time: 15, multitask: true },
-      ],
-      Fitness: [
-        { name: "Workout", time: 30 },
-        { name: "Short workout", time: 15 },
-        { name: "Stretching", time: 10 },
-      ],
-      Beauty: [
-        { name: "Skincare", time: 10 },
-        { name: "Tweeze eyebrows", time: 10 },
-        { name: "Face scrub", time: 5 },
-      ],
-      Relaxation: [
-        { name: "Meditation", time: 10 },
-        { name: "Journaling", time: 15 },
-        { name: "Legs on the wall", time: 10 },
-      ],
-      Nutrition: [
-        { name: "Green smoothie", time: 10 },
-        { name: "Eat a fruit", time: 5 },
-        { name: "Meal prep", time: 15 },
-      ],
-      "Personal Development": [
-        { name: "Reading", time: 15 },
-        { name: "Learn a new skill", time: 15 },
-        { name: "Prepare outfit", time: 10 },
-      ],
-    };
+    const habits = [
+      // Wellness
+      { name: "Sunshine exposure", time: [5, 10, 15], category: "wellness", multiTask: true },
+      { name: "Bouncing", time: [2], category: "wellness" },
+      { name: "Legs on the wall", time: [5, 10], category: "wellness" },
+      { name: "Posture exercises", time: [12], category: "wellness" },
+      { name: "Stomach vacuum", time: [2], category: "wellness" },
+      { name: "Stretching", time: [5, 10], category: "wellness" },
+      { name: "Walking", time: [20], category: "wellness", multiTask: true },
+      { name: "Workout", time: [30], category: "wellness", postHabit: "Wash body" },
+      { name: "HIIT workout", time: [10], category: "wellness", postHabit: "Wash body" },
 
-    const preferenceButtons = document.querySelectorAll(".preference-button");
-    const generateButton = document.getElementById("generate-activities");
-    const activityList = document.getElementById("activity-list");
+      // Nutrition
+      { name: "Drink lemon water", time: [2], category: "nutrition" },
+      { name: "Green smoothie", time: [10], category: "nutrition" },
+      { name: "Herbal tea", time: [10], category: "nutrition" },
+      { name: "Eat a fruit", time: [5], category: "nutrition" },
+      { name: "Meal prep", time: [15], category: "nutrition" },
 
-    // Seleziona e deseleziona i pulsanti delle preferenze
-    preferenceButtons.forEach((button) => {
+      // Self-care
+      { name: "Oil pulling", time: [10, 15], category: "self-care", multiTask: true },
+      { name: "Shower", time: [20], category: "self-care", autoAdd: true },
+      { name: "Wash body", time: [10], category: "self-care", autoAdd: true },
+      { name: "Scalp massage", time: [10], category: "self-care" },
+      { name: "Skincare", time: [5, 10], category: "self-care" },
+
+      // Beauty
+      { name: "Hair mask", time: [15, 20], category: "beauty", postHabit: "Shower", multiTask: true },
+      { name: "Face mask", time: [10, 15], category: "beauty", multiTask: true },
+      { name: "Face scrub", time: [5], category: "beauty", preHabit: "Shower" },
+      { name: "Body scrub", time: [5], category: "beauty", preHabit: "Shower" },
+      { name: "Tweeze eyebrows", time: [5, 10], category: "beauty" },
+      { name: "Manicure", time: [10], category: "beauty" },
+      { name: "Pedicure", time: [10], category: "beauty" },
+
+      // Personal Development
+      { name: "Meditation", time: [10, 30], category: "personal-dev" },
+      { name: "Journaling", time: [15], category: "personal-dev" },
+      { name: "Reading", time: [10, 15], category: "personal-dev" },
+      { name: "Learn a new skill", time: [15], category: "personal-dev" },
+      { name: "Prepare outfit", time: [10], category: "personal-dev" },
+    ];
+
+    const selectedPreferences = new Set();
+    let selectedTime = 30;
+
+    // Add event listeners to preferences buttons
+    document.querySelectorAll("#preferences-container button").forEach(button => {
       button.addEventListener("click", () => {
-        button.classList.toggle("selected");
+        const category = button.getAttribute("data-category");
+        if (selectedPreferences.has(category)) {
+          selectedPreferences.delete(category);
+          button.classList.remove("selected");
+        } else {
+          selectedPreferences.add(category);
+          button.classList.add("selected");
+        }
       });
     });
 
-    generateButton.addEventListener("click", () => {
-      const timeAvailable = parseInt(document.getElementById("time").value, 10);
-      const selectedInterests = Array.from(
-        document.querySelectorAll(".preference-button.selected")
-      ).map((button) => button.dataset.value);
-
-      const filteredActivities = selectedInterests
-        .flatMap((interest) => activities[interest])
-        .filter((activity) => activity.time <= timeAvailable);
-
-      activityList.innerHTML = ""; // Clear previous activities
-
-      let totalTime = 0;
-
-      for (const activity of filteredActivities) {
-        if (totalTime + activity.time <= timeAvailable) {
-          const div = document.createElement("div");
-          div.className = "activity";
-          div.innerHTML = `
-            <span>${activity.name} (${activity.time} min)</span>
-            <button onclick="markComplete(this)">Complete</button>
-          `;
-          activityList.appendChild(div);
-          totalTime += activity.time;
-        }
-      }
-
-      if (totalTime === 0) {
-        activityList.innerHTML = "<p>No activities fit your criteria. Try changing the time or themes.</p>";
-      }
+    // Add event listeners to time selection buttons
+    document.querySelectorAll(".time-selection button").forEach(button => {
+      button.addEventListener("click", () => {
+        selectedTime = parseInt(button.getAttribute("data-time"));
+        document.querySelectorAll(".time-selection button").forEach(btn => btn.classList.remove("selected"));
+        button.classList.add("selected");
+        generateRoutine();
+      });
     });
 
-    function markComplete(button) {
-      button.parentElement.classList.add("completed");
+    // Generate the routine
+    function generateRoutine() {
+      const routine = [];
+      let remainingTime = selectedTime;
+
+      const filteredHabits = habits.filter(habit =>
+        selectedPreferences.has(habit.category)
+      );
+
+      while (remainingTime > 0) {
+        for (const habit of filteredHabits) {
+          const habitTime = habit.time.find(t => t <= remainingTime);
+          if (habitTime) {
+            routine.push({ name: habit.name, time: habitTime });
+            remainingTime -= habitTime;
+
+            // Add dependent habits
+            if (habit.postHabit) {
+              const postHabit = habits.find(h => h.name === habit.postHabit);
+              if (postHabit && !routine.some(r => r.name === postHabit.name)) {
+                routine.push({ name: postHabit.name, time: postHabit.time[0] });
+                remainingTime -= postHabit.time[0];
+              }
+            }
+          }
+        }
+        break; // Avoid infinite loop
+      }
+
+      displayRoutine(routine);
     }
+
+    // Display the routine
+    function displayRoutine(routine) {
+      const routineList = document.getElementById("routine-list");
+      routineList.innerHTML = "";
+      routine.forEach(habit => {
+        const li = document.createElement("li");
+        li.textContent = `${habit.name} - ${habit.time} min`;
+        routineList.appendChild(li);
+      });
+    }
+
+    generateRoutine(); // Generate initial routine
   </script>
 </body>
 </html>
