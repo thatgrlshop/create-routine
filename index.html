@@ -31,21 +31,23 @@
       gap: 10px;
     }
     button {
-      padding: 10px 15px;
-      font-size: 14px;
-      background-color: #ddd;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #ccc;
-    }
-    button.selected {
-      background-color: #A17E89;
-      color: white;
-    }
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: #ddd;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  color: #A17E89; /* Imposta il colore rosa per il testo */
+}
+button:hover {
+  background-color: #ccc;
+  color: #A17E89; /* Mantieni il testo rosa anche durante hover */
+}
+button.selected {
+  background-color: #A17E89;
+  color: white; /* Testo bianco quando selezionato */
+}
     .result-list {
       list-style: none;
       padding: 0;
