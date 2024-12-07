@@ -244,7 +244,7 @@
   routine.forEach((habit, index) => {
     const li = document.createElement("li");
     li.innerHTML = `${habit.name} - ${habit.time} min` +
-      (habit.multiTaskWith ? `<div class="multitask">Do also: ${habit.multiTaskWith}</div>` : "");
+      (habit.multiTaskWith ? `<div class="multitask">In the meantime: ${habit.multiTaskWith}</div>` : "");
     
     // Highlight the current habit in bold
     if (index === currentHabitIndex) {
