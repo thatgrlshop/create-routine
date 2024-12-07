@@ -42,6 +42,7 @@
     }
     button:hover {
       background-color: #ccc;
+      color: #A17E89;
     }
     button.selected {
       background-color: #A17E89;
@@ -59,25 +60,23 @@
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    .timer-controls {
-      text-align: center;
-      margin-top: 20px;
-    }
-    .timer {
-      font-size: 24px;
-      margin: 15px 0;
-      font-weight: bold;
-    }
-    .control-buttons {
+    .controls {
       display: flex;
       justify-content: center;
       gap: 10px;
+      margin-top: 20px;
+    }
+    #timer-display {
+      font-size: 18px;
+      text-align: center;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
   <h1>Create your routine 🤍</h1>
 
+  <!-- Preferences Selection -->
   <div class="preferences">
     <h2>Select Your Preferences</h2>
     <div class="preferences-buttons" id="preferences-container">
@@ -89,6 +88,7 @@
     </div>
   </div>
 
+  <!-- Time Selection -->
   <div class="time-selection">
     <h2>Select Your Available Time</h2>
     <div class="time-buttons">
@@ -98,47 +98,69 @@
       <button data-time="20">20 Min</button>
       <button data-time="30">30 Min</button>
       <button data-time="60">1 Hour</button>
+      <button data-time="90">1.5 Hours</button>
+      <button data-time="120">2 Hours</button>
     </div>
   </div>
 
+  <!-- Routine Generated -->
   <div class="result">
     <h2>Your Routine</h2>
+    <button id="create-routine">Create Routine</button>
     <ul class="result-list" id="routine-list"></ul>
-    <div class="timer-controls">
-      <div class="control-buttons">
-        <button id="create-routine">Create</button>
-        <button id="start-timer" disabled>Start Timer</button>
-        <button id="pause-timer" disabled>Pause</button>
-        <button id="next-habit" disabled>Next</button>
-      </div>
-      <div class="timer" id="timer-display">00:00</div>
+    <div id="timer-display">No timer running</div>
+    <div class="controls">
+      <button id="start-timer">Start Timer</button>
+      <button id="pause-timer">Pause Timer</button>
+      <button id="next-habit">Next Habit</button>
     </div>
   </div>
 
   <script>
     const habits = [
-      { name: "Sunshine exposure", time: [5, 10, 15], category: "wellness" },
+      { name: "Sunshine exposure", time: [5, 10, 15], category: "wellness", multiTask: true },
+      { name: "Bouncing", time: [2], category: "wellness" },
+      { name: "Legs on the wall", time: [5, 10], category: "wellness" },
       { name: "Posture exercises", time: [12], category: "wellness" },
-      { name: "Stretching", time: [10], category: "wellness" },
+      { name: "Stomach vacuum", time: [2], category: "wellness" },
+      { name: "Stretching", time: [5, 10], category: "wellness" },
+      { name: "Workout", time: [30], category: "wellness", postHabit: "Wash body" },
+      { name: "HIIT workout", time: [10], category: "wellness", postHabit: "Wash body" },
+
       { name: "Drink lemon water", time: [2], category: "nutrition" },
-      { name: "Hair mask", time: [15], category: "beauty" },
+      { name: "Green smoothie", time: [10], category: "nutrition" },
+      { name: "Herbal tea", time: [10], category: "nutrition" },
+      { name: "Eat a fruit", time: [5], category: "nutrition" },
+      { name: "Meal prep", time: [15], category: "nutrition" },
+
+      { name: "Oil pulling", time: [10, 15], category: "self-care", multiTask: true },
+      { name: "Shower", time: [20], category: "self-care", autoAdd: true },
+      { name: "Wash body", time: [10], category: "self-care", autoAdd: true },
+      { name: "Scalp massage", time: [10], category: "self-care" },
+      { name: "Skincare", time: [5, 10], category: "self-care" },
+
+      { name: "Hair mask", time: [15, 20], category: "beauty", postHabit: "Shower", multiTask: true },
+      { name: "Face mask", time: [10, 15], category: "beauty", multiTask: true },
+      { name: "Face scrub", time: [5], category: "beauty", preHabit: "Shower" },
+      { name: "Body scrub", time: [5], category: "beauty", preHabit: "Shower" },
+      { name: "Tweeze eyebrows", time: [5, 10], category: "beauty" },
+      { name: "Manicure", time: [10], category: "beauty" },
+      { name: "Pedicure", time: [10], category: "beauty" },
+
+      { name: "Meditation", time: [10, 30], category: "personal-dev" },
+      { name: "Journaling", time: [15], category: "personal-dev" },
+      { name: "Reading", time: [10, 15], category: "personal-dev" },
+      { name: "Learn a new skill", time: [15], category: "personal-dev" },
+      { name: "Prepare outfit", time: [10], category: "personal-dev" },
     ];
 
-    let selectedPreferences = new Set();
-    let selectedTime = null;
+    const selectedPreferences = new Set();
+    let selectedTime = 30;
     let routine = [];
     let currentHabitIndex = 0;
-    let timer = null;
-    let remainingSeconds = 0;
+    let timerInterval;
+    let remainingTime = 0;
 
-    const routineList = document.getElementById("routine-list");
-    const timerDisplay = document.getElementById("timer-display");
-    const createButton = document.getElementById("create-routine");
-    const startButton = document.getElementById("start-timer");
-    const pauseButton = document.getElementById("pause-timer");
-    const nextButton = document.getElementById("next-habit");
-
-    // Add event listeners to preferences buttons
     document.querySelectorAll("#preferences-container button").forEach(button => {
       button.addEventListener("click", () => {
         const category = button.getAttribute("data-category");
@@ -152,7 +174,6 @@
       });
     });
 
-    // Add event listeners to time selection buttons
     document.querySelectorAll(".time-selection button").forEach(button => {
       button.addEventListener("click", () => {
         selectedTime = parseInt(button.getAttribute("data-time"));
@@ -161,120 +182,93 @@
       });
     });
 
-    // Generate the routine
-    createButton.addEventListener("click", () => {
-      if (!selectedPreferences.size || !selectedTime) {
-        alert("Please select preferences and available time.");
-        return;
-      }
+    document.getElementById("create-routine").addEventListener("click", generateRoutine);
+    document.getElementById("start-timer").addEventListener("click", startTimer);
+    document.getElementById("pause-timer").addEventListener("click", pauseTimer);
+    document.getElementById("next-habit").addEventListener("click", nextHabit);
 
+    function generateRoutine() {
       routine = [];
-      let remainingTime = selectedTime;
+      let timeLeft = selectedTime;
+      const filteredHabits = habits.filter(h => selectedPreferences.has(h.category));
 
-      const filteredHabits = habits.filter(habit => selectedPreferences.has(habit.category));
-
-      while (remainingTime > 0) {
-        for (const habit of filteredHabits) {
-          const habitTime = habit.time.find(t => t <= remainingTime);
-          if (habitTime) {
-            routine.push({ name: habit.name, time: habitTime });
-            remainingTime -= habitTime;
-          }
+      while (timeLeft > 0 && filteredHabits.length > 0) {
+        const habit = filteredHabits[Math.floor(Math.random() * filteredHabits.length)];
+        const habitTime = habit.time.find(t => t <= timeLeft);
+        if (habitTime) {
+          routine.push({ name: habit.name, time: habitTime });
+          timeLeft -= habitTime;
         }
-        break; // Avoid infinite loops
       }
-
-      if (routine.length === 0) {
-        alert("No routine available for the selected time and preferences.");
-        return;
-      }
-
       displayRoutine();
-      startButton.disabled = false;
-      currentHabitIndex = 0;
-    });
-
-    // Display the routine
-    function displayRoutine() {
-      routineList.innerHTML = "";
-      routine.forEach((habit, index) => {
-        const li = document.createElement("li");
-        li.textContent = `${habit.name} - ${habit.time} min`;
-        if (index === currentHabitIndex) li.style.fontWeight = "bold";
-        routineList.appendChild(li);
-      });
     }
 
-    // Timer logic
-    function updateTimerDisplay(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const remainingSecs = seconds % 60;
-      timerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(remainingSecs).padStart(2, "0")}`;
+    function displayRoutine() {
+      const routineList = document.getElementById("routine-list");
+      routineList.innerHTML = "";
+      routine.forEach(habit => {
+        const li = document.createElement("li");
+                li.textContent = `${habit.name} - ${habit.time} min`;
+        routineList.appendChild(li);
+      });
+      if (routine.length === 0) {
+        routineList.innerHTML = "<li>No routine available. Please adjust your preferences or time selection.</li>";
+      }
     }
 
     function startTimer() {
-      if (timer) return; // Avoid multiple timers
-      remainingSeconds = routine[currentHabitIndex].time * 60;
+      if (routine.length === 0 || currentHabitIndex >= routine.length) {
+        alert("No routine to start. Please create a routine first.");
+        return;
+      }
 
-      timer = setInterval(() => {
-        if (remainingSeconds > 0) {
-          remainingSeconds--;
-          updateTimerDisplay(remainingSeconds);
-        } else {
-          clearInterval(timer);
-          timer = null;
-          alert("Time's up for this habit!");
-          nextHabit();
-        }
-      }, 1000);
+      if (!timerInterval) {
+        const habit = routine[currentHabitIndex];
+        remainingTime = habit.time * 60; // Convert minutes to seconds
+        updateTimerDisplay(habit.name, remainingTime);
+        timerInterval = setInterval(() => {
+          if (remainingTime > 0) {
+            remainingTime--;
+            updateTimerDisplay(habit.name, remainingTime);
+          } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            alert(`Time's up for "${habit.name}". Moving to the next habit.`);
+            nextHabit();
+          }
+        }, 1000);
+      }
     }
 
     function pauseTimer() {
-      clearInterval(timer);
-      timer = null;
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
     }
 
     function nextHabit() {
-      pauseTimer();
-      currentHabitIndex++;
-      if (currentHabitIndex >= routine.length) {
-        alert("Routine completed!");
-        resetRoutine();
-        return;
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
       }
-      displayRoutine();
-      startTimer();
+
+      currentHabitIndex++;
+      if (currentHabitIndex < routine.length) {
+        startTimer();
+      } else {
+        alert("You have completed your routine!");
+        document.getElementById("timer-display").textContent = "No timer running";
+        currentHabitIndex = 0; // Reset for the next session
+      }
     }
 
-    function resetRoutine() {
-      routine = [];
-      currentHabitIndex = 0;
-      timer = null;
-      remainingSeconds = 0;
-      timerDisplay.textContent = "00:00";
-      routineList.innerHTML = "";
-      startButton.disabled = true;
-      pauseButton.disabled = true;
-      nextButton.disabled = true;
+    function updateTimerDisplay(habitName, seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      const formattedTime = `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+      document.getElementById("timer-display").textContent = `Current Habit: ${habitName} | Time Left: ${formattedTime}`;
     }
-
-    // Event listeners for timer controls
-    startButton.addEventListener("click", () => {
-      startTimer();
-      startButton.disabled = true;
-      pauseButton.disabled = false;
-      nextButton.disabled = false;
-    });
-
-    pauseButton.addEventListener("click", () => {
-      pauseTimer();
-      startButton.disabled = false;
-      pauseButton.disabled = true;
-    });
-
-    nextButton.addEventListener("click", () => {
-      nextHabit();
-    });
   </script>
 </body>
 </html>
