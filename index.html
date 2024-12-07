@@ -100,7 +100,7 @@
     <h2>Your Routine</h2>
     <ul class="result-list" id="routine-list"></ul>
     <div class="timer-controls">
-      <button id="start-timer">Start Timer</button>
+      <button id="start-timer" disabled>Start Timer</button>
       <button id="pause-timer" disabled>Pause</button>
       <button id="next-habit" disabled>Next</button>
       <div class="timer" id="timer-display">00:00</div>
@@ -117,12 +117,13 @@
     ];
 
     let selectedPreferences = new Set();
-    let selectedTime = 30;
+    let selectedTime = null;
     let routine = [];
     let currentHabitIndex = 0;
     let timer = null;
     let remainingSeconds = 0;
 
+    const routineList = document.getElementById("routine-list");
     const timerDisplay = document.getElementById("timer-display");
     const startButton = document.getElementById("start-timer");
     const pauseButton = document.getElementById("pause-timer");
@@ -151,6 +152,15 @@
 
     function generateRoutine() {
       routine = [];
+      if (!selectedTime) {
+        alert("Please select a time!");
+        return;
+      }
+      if (selectedPreferences.size === 0) {
+        alert("Please select at least one category!");
+        return;
+      }
+
       let remainingTime = selectedTime;
 
       const filteredHabits = habits.filter(habit => selectedPreferences.has(habit.category));
@@ -167,12 +177,18 @@
         }
       }
 
+      if (routine.length === 0) {
+        alert("No routine available for the selected time and preferences.");
+      }
+
       displayRoutine();
     }
 
     function displayRoutine() {
-      const routineList = document.getElementById("routine-list");
       routineList.innerHTML = routine.map(habit => `<li>${habit.name} - ${habit.time} min</li>`).join("");
+      startButton.disabled = routine.length === 0;
+      pauseButton.disabled = true;
+      nextButton.disabled = true;
     }
 
     function updateTimerDisplay() {
@@ -239,7 +255,7 @@
     pauseButton.addEventListener("click", pauseTimer);
     nextButton.addEventListener("click", nextHabit);
 
-    generateRoutine();
+    document.getElementById("routine-list").addEventListener("click", generateRoutine);
   </script>
 </body>
 </html>
