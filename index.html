@@ -113,7 +113,7 @@
     <h2>Your Routine</h2>
     <button id="create-routine">Create Routine</button>
     <ul class="result-list" id="routine-list"></ul>
-    <div id="timer-display">No timer running</div>
+    <div id="timer-display"></div>
     <div class="controls">
       <button id="start-timer">Start Timer</button>
       <button id="pause-timer">Pause Timer</button>
@@ -300,7 +300,7 @@
         startTimer();
       } else {
         alert("You have completed your routine!");
-        document.getElementById("timer-display").textContent = "No timer running";
+        document.getElementById("timer-display").textContent = "";
         currentHabitIndex = 0; // Reset for the next session
       }
     }
