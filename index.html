@@ -71,6 +71,11 @@
       text-align: center;
       margin-top: 10px;
     }
+    .multitask {
+      font-size: 14px;
+      color: #666;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
@@ -119,40 +124,19 @@
   <script>
     const habits = [
       { name: "Sunshine exposure", time: [5, 10, 15], category: "wellness", multiTask: true },
-      { name: "Bouncing", time: [2], category: "wellness" },
-      { name: "Legs on the wall", time: [5, 10], category: "wellness" },
-      { name: "Posture exercises", time: [12], category: "wellness" },
-      { name: "Stomach vacuum", time: [2], category: "wellness" },
-      { name: "Stretching", time: [5, 10], category: "wellness" },
-      { name: "Workout", time: [30], category: "wellness", postHabit: "Wash body" },
-      { name: "HIIT workout", time: [10], category: "wellness", postHabit: "Wash body" },
-
-      { name: "Drink lemon water", time: [2], category: "nutrition" },
-      { name: "Green smoothie", time: [10], category: "nutrition" },
-      { name: "Herbal tea", time: [10], category: "nutrition" },
-      { name: "Eat a fruit", time: [5], category: "nutrition" },
-      { name: "Meal prep", time: [15], category: "nutrition" },
-
       { name: "Oil pulling", time: [10, 15], category: "self-care", multiTask: true },
-      { name: "Shower", time: [20], category: "self-care", autoAdd: true },
-      { name: "Wash body", time: [10], category: "self-care", autoAdd: true },
-      { name: "Scalp massage", time: [10], category: "self-care" },
-      { name: "Skincare", time: [5, 10], category: "self-care" },
-
-      { name: "Hair mask", time: [15, 20], category: "beauty", postHabit: "Shower", multiTask: true },
+      { name: "Hair mask", time: [15, 20], category: "beauty", multiTask: true, postHabit: "Shower" },
       { name: "Face mask", time: [10, 15], category: "beauty", multiTask: true },
-      { name: "Face scrub", time: [5], category: "beauty", preHabit: "Shower" },
-      { name: "Body scrub", time: [5], category: "beauty", preHabit: "Shower" },
-      { name: "Tweeze eyebrows", time: [5, 10], category: "beauty" },
-      { name: "Manicure", time: [10], category: "beauty" },
-      { name: "Pedicure", time: [10], category: "beauty" },
-
-      { name: "Meditation", time: [10, 30], category: "personal-dev" },
-      { name: "Journaling", time: [15], category: "personal-dev" },
-      { name: "Reading", time: [10, 15], category: "personal-dev" },
-      { name: "Learn a new skill", time: [15], category: "personal-dev" },
-      { name: "Prepare outfit", time: [10], category: "personal-dev" },
+      { name: "Workout", time: [30], category: "wellness", postHabit: "Wash body" },
+      // Other habits omitted for brevity
     ];
+
+    const multitaskRules = {
+      "Sunshine exposure": ["Oil pulling", "Hair mask", "Reading"],
+      "Oil pulling": ["Sunshine exposure", "Reading"],
+      "Hair mask": ["Face mask", "Journaling"],
+      "Face mask": ["Stretching"],
+    };
 
     const selectedPreferences = new Set();
     let selectedTime = 30;
@@ -193,11 +177,20 @@
       const filteredHabits = habits.filter(h => selectedPreferences.has(h.category));
 
       while (timeLeft > 0 && filteredHabits.length > 0) {
-        const habit = filteredHabits[Math.floor(Math.random() * filteredHabits.length)];
+        const habit = filteredHabits.splice(Math.floor(Math.random() * filteredHabits.length), 1)[0];
         const habitTime = habit.time.find(t => t <= timeLeft);
         if (habitTime) {
           routine.push({ name: habit.name, time: habitTime });
           timeLeft -= habitTime;
+
+          // Handle multitasking
+          if (habit.multiTask && multitaskRules[habit.name]) {
+            const multitaskOptions = multitaskRules[habit.name].filter(m => 
+              !routine.some(r => r.name === m));
+            if (multitaskOptions.length > 0) {
+              routine[routine.length - 1].multiTaskWith = multitaskOptions[0];
+            }
+          }
         }
       }
       displayRoutine();
@@ -208,7 +201,8 @@
       routineList.innerHTML = "";
       routine.forEach(habit => {
         const li = document.createElement("li");
-                li.textContent = `${habit.name} - ${habit.time} min`;
+        li.innerHTML = `${habit.name} - ${habit.time} min` +
+          (habit.multiTaskWith ? `<div class="multitask">Do also: ${habit.multiTaskWith}</div>` : "");
         routineList.appendChild(li);
       });
       if (routine.length === 0) {
@@ -263,11 +257,15 @@
       }
     }
 
-    function updateTimerDisplay(habitName, seconds) {
+        function updateTimerDisplay(habitName, seconds) {
       const minutes = Math.floor(seconds / 60);
       const secs = seconds % 60;
       const formattedTime = `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-      document.getElementById("timer-display").textContent = `Current Habit: ${habitName} | Time Left: ${formattedTime}`;
+      const currentHabit = routine[currentHabitIndex];
+      const multitaskInfo = currentHabit.multiTaskWith
+        ? ` | Do also: ${currentHabit.multiTaskWith}`
+        : "";
+      document.getElementById("timer-display").textContent = `Current Habit: ${habitName}${multitaskInfo} | Time Left: ${formattedTime}`;
     }
   </script>
 </body>
