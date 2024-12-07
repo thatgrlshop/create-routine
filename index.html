@@ -309,11 +309,7 @@
   const minutes = Math.floor(seconds / 60);
   const secs = seconds % 60;
   const formattedTime = `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-  const currentHabit = routine[currentHabitIndex];
-  const multitaskInfo = currentHabit.multiTaskWith
-    ? ` | Do also: ${currentHabit.multiTaskWith}`
-    : "";
-  document.getElementById("timer-display").textContent = `Current Habit: ${habitName}${multitaskInfo} | Time Left: ${formattedTime}`;
+  document.getElementById("timer-display").textContent = `Time Left: ${formattedTime}`;
   displayRoutine(); // Aggiorna la lista con il grassetto
 }
   </script>
