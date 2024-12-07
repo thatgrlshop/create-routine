@@ -205,43 +205,58 @@
     document.getElementById("next-habit").addEventListener("click", nextHabit);
 
     function generateRoutine() {
-      routine = [];
-      let timeLeft = selectedTime;
-      const filteredHabits = habits.filter(h => selectedPreferences.has(h.category));
+  routine = [];
+  let timeLeft = selectedTime;
+  const filteredHabits = habits.filter(h => selectedPreferences.has(h.category));
 
-      while (timeLeft > 0 && filteredHabits.length > 0) {
-        const habit = filteredHabits.splice(Math.floor(Math.random() * filteredHabits.length), 1)[0];
-        const habitTime = habit.time.find(t => t <= timeLeft);
-        if (habitTime) {
-          routine.push({ name: habit.name, time: habitTime });
-          timeLeft -= habitTime;
+  while (timeLeft > 0 && filteredHabits.length > 0) {
+    const habit = filteredHabits.splice(Math.floor(Math.random() * filteredHabits.length), 1)[0];
+    const habitTime = habit.time.find(t => t <= timeLeft);
+    if (habitTime) {
+      routine.push({ name: habit.name, time: habitTime });
+      timeLeft -= habitTime;
 
-          // Handle multitasking
-          if (habit.multiTask && multitaskRules[habit.name]) {
-            const multitaskOptions = multitaskRules[habit.name].filter(m => 
-              !routine.some(r => r.name === m));
-            if (multitaskOptions.length > 0) {
-              routine[routine.length - 1].multiTaskWith = multitaskOptions[0];
-            }
-          }
+      // Handle multitasking
+      if (habit.multiTask && multitaskRules[habit.name]) {
+        const multitaskOptions = multitaskRules[habit.name].filter(m =>
+          !routine.some(r => r.name === m));
+        if (multitaskOptions.length > 0) {
+          routine[routine.length - 1].multiTaskWith = multitaskOptions[0];
         }
       }
-      displayRoutine();
-    }
 
-    function displayRoutine() {
-      const routineList = document.getElementById("routine-list");
-      routineList.innerHTML = "";
-      routine.forEach(habit => {
-        const li = document.createElement("li");
-        li.innerHTML = `${habit.name} - ${habit.time} min` +
-          (habit.multiTaskWith ? `<div class="multitask">Do also: ${habit.multiTaskWith}</div>` : "");
-        routineList.appendChild(li);
-      });
-      if (routine.length === 0) {
-        routineList.innerHTML = "<li>No routine available. Please adjust your preferences or time selection.</li>";
+      // Add dependent habit (Shower after Hair Mask)
+      if (habit.name === "Hair mask") {
+        const postHabit = habits.find(h => h.name === "Shower");
+        if (postHabit && !routine.some(r => r.name === postHabit.name)) {
+          routine.push({ name: postHabit.name, time: postHabit.time[0] });
+          timeLeft -= postHabit.time[0];
+        }
       }
     }
+  }
+  displayRoutine();
+}
+
+    function displayRoutine() {
+  const routineList = document.getElementById("routine-list");
+  routineList.innerHTML = "";
+  routine.forEach((habit, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `${habit.name} - ${habit.time} min` +
+      (habit.multiTaskWith ? `<div class="multitask">Do also: ${habit.multiTaskWith}</div>` : "");
+    
+    // Highlight the current habit in bold
+    if (index === currentHabitIndex) {
+      li.style.fontWeight = "bold";
+    }
+
+    routineList.appendChild(li);
+  });
+  if (routine.length === 0) {
+    routineList.innerHTML = "<li>No routine available. Please adjust your preferences or time selection.</li>";
+  }
+}
 
     function startTimer() {
       if (routine.length === 0 || currentHabitIndex >= routine.length) {
@@ -291,15 +306,16 @@
     }
 
         function updateTimerDisplay(habitName, seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const secs = seconds % 60;
-      const formattedTime = `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-      const currentHabit = routine[currentHabitIndex];
-      const multitaskInfo = currentHabit.multiTaskWith
-        ? ` | Do also: ${currentHabit.multiTaskWith}`
-        : "";
-      document.getElementById("timer-display").textContent = `Current Habit: ${habitName}${multitaskInfo} | Time Left: ${formattedTime}`;
-    }
+  const minutes = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  const formattedTime = `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  const currentHabit = routine[currentHabitIndex];
+  const multitaskInfo = currentHabit.multiTaskWith
+    ? ` | Do also: ${currentHabit.multiTaskWith}`
+    : "";
+  document.getElementById("timer-display").textContent = `Current Habit: ${habitName}${multitaskInfo} | Time Left: ${formattedTime}`;
+  displayRoutine(); // Aggiorna la lista con il grassetto
+}
   </script>
 </body>
 </html>
