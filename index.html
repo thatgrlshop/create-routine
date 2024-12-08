@@ -76,6 +76,13 @@
       color: #666;
       margin-top: 5px;
     }
+    .habit-image {
+  width: 100px;
+  height: auto;
+  border-radius: 10px;
+  margin-right: 10px;
+  float: left;
+}
   </style>
 </head>
 <body>
@@ -124,44 +131,104 @@
   <script>
     const habits = [
   // Wellness
-  { name: "Sunshine exposure", time: [5, 10, 15], category: "wellness", multiTask: true },
-  { name: "Bouncing", time: [2], category: "wellness" },
-  { name: "Legs on the wall", time: [5, 10], category: "wellness" },
-  { name: "Posture exercises", time: [12], category: "wellness" },
-  { name: "Stomach vacuum", time: [2], category: "wellness" },
-  { name: "Stretching", time: [5, 10], category: "wellness" },
-  { name: "Workout", time: [30], category: "wellness", postHabit: "Wash body" },
-  { name: "HIIT workout", time: [10], category: "wellness", postHabit: "Wash body" },
+  { name: "Sunshine exposure", time: [5, 10, 15], category: "wellness", multiTask: true,
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Bouncing", time: [2], category: "wellness",
+  img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Legs on the wall", time: [5, 10], category: "wellness",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Posture exercises", time: [12], category: "wellness",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Stomach vacuum", time: [2], category: "wellness",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Stretching", time: [5, 10], category: "wellness",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Workout", time: [30], category: "wellness", postHabit: "Wash body",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "HIIT workout", time: [10], category: "wellness", postHabit: "Wash body",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
 
   // Nutrition
-  { name: "Drink lemon water", time: [2], category: "nutrition" },
-  { name: "Green smoothie", time: [10], category: "nutrition" },
-  { name: "Herbal tea", time: [10], category: "nutrition" },
-  { name: "Eat a fruit", time: [5], category: "nutrition" },
-  { name: "Meal prep", time: [15], category: "nutrition" },
+  { name: "Drink lemon water", time: [2], category: "nutrition",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Green smoothie", time: [10], category: "nutrition",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Herbal tea", time: [10], category: "nutrition",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Eat a fruit", time: [5], category: "nutrition",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Meal prep", time: [15], category: "nutrition",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
 
   // Self-care
-  { name: "Oil pulling", time: [10, 15], category: "self-care", multiTask: true },
-  { name: "Shower", time: [20], category: "self-care", autoAdd: true },
-  { name: "Wash body", time: [10], category: "self-care", autoAdd: true },
-  { name: "Scalp massage", time: [10], category: "self-care" },
-  { name: "Skincare", time: [5, 10], category: "self-care" },
+  { name: "Oil pulling", time: [10, 15], category: "self-care", multiTask: true,
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Shower", time: [20], category: "self-care", autoAdd: true,
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Wash body", time: [10], category: "self-care", autoAdd: true,
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Scalp massage", time: [10], category: "self-care",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Skincare", time: [5, 10], category: "self-care",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
 
   // Beauty
-  { name: "Hair mask", time: [15, 20], category: "beauty", postHabit: "Shower", multiTask: true },
-  { name: "Face mask", time: [10, 15], category: "beauty", multiTask: true },
-  { name: "Face scrub", time: [5], category: "beauty", preHabit: "Shower" },
-  { name: "Body scrub", time: [5], category: "beauty", preHabit: "Shower" },
-  { name: "Tweeze eyebrows", time: [5, 10], category: "beauty" },
-  { name: "Manicure", time: [10], category: "beauty" },
-  { name: "Pedicure", time: [10], category: "beauty" },
+  { name: "Hair mask", time: [15, 20], category: "beauty", postHabit: "Shower", multiTask: true,
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Face mask", time: [10, 15], category: "beauty", multiTask: true,
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Face scrub", time: [5], category: "beauty", preHabit: "Shower",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Body scrub", time: [5], category: "beauty", preHabit: "Shower",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Tweeze eyebrows", time: [5, 10], category: "beauty",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Manicure", time: [10], category: "beauty",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Pedicure", time: [10], category: "beauty",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
 
   // Personal Development
-  { name: "Meditation", time: [10, 30], category: "personal-dev" },
-  { name: "Journaling", time: [15], category: "personal-dev" },
-  { name: "Reading", time: [10, 15], category: "personal-dev" },
-  { name: "Learn a new skill", time: [15], category: "personal-dev" },
-  { name: "Prepare outfit", time: [10], category: "personal-dev" },
+  { name: "Meditation", time: [10, 30], category: "personal-dev",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Journaling", time: [15], category: "personal-dev",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Reading", time: [10, 15], category: "personal-dev",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Learn a new skill", time: [15], category: "personal-dev",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
+  { name: "Prepare outfit", time: [10], category: "personal-dev",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg",
+   description: "Expose yourself to sunlight for a few minutes to boost vitamin D." },
 ];
 
     const multitaskRules = {
@@ -241,18 +308,30 @@
     function displayRoutine() {
   const routineList = document.getElementById("routine-list");
   routineList.innerHTML = "";
+
   routine.forEach((habit, index) => {
     const li = document.createElement("li");
-    li.innerHTML = `${habit.name} - ${habit.time} min` +
-      (habit.multiTaskWith ? `<div class="multitask">In the meantime: ${habit.multiTaskWith}</div>` : "");
-    
-    // Highlight the current habit in bold
-    if (index === currentHabitIndex) {
-      li.style.fontWeight = "bold";
+
+    if (habit.multiTaskWith) {
+      // Visualizzazione per multitask habit (solo descrizione, senza immagine)
+      li.innerHTML = `<div class="multitask">(In the meantime: ${habit.multiTaskWith} - ${habit.description})</div>`;
+    } else {
+      // Visualizzazione normale per habit con immagine e descrizione
+      li.innerHTML = `
+        <img src="${habit.img}" class="habit-image" alt="${habit.name}" style="width: 100px; border-radius: 10px;">
+        <div>
+          <div style="font-weight: bold;">${habit.name} (${habit.time[0]} min):</div>
+          <div>${habit.description}</div>
+        </div>
+      `;
     }
+
+    // Evidenzia la habit corrente in grassetto
+    if (index === currentHabitIndex) li.style.fontWeight = "bold";
 
     routineList.appendChild(li);
   });
+
   if (routine.length === 0) {
     routineList.innerHTML = "<li>No routine available. Please adjust your preferences or time selection.</li>";
   }
