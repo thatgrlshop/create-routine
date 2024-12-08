@@ -61,6 +61,9 @@
       margin-bottom: 10px;
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      height: 100px; /* Altezza definita per il riquadro */
+      display: flex;
+      align-items: center; /* Centra il contenuto verticalmente */
     }
     .controls {
       display: flex;
@@ -78,13 +81,12 @@
       color: #666;
       margin-top: 5px;
     }
-    5px;
+    .result-list img {
+      width: auto; /* Larghezza automatica */
+      height: 100%; /* L'immagine occupa tutta l'altezza del riquadro */
+      border-radius: 5px;
+      object-fit: cover; /* Adatta l'immagine al riquadro */
     }
-.result-list img {
-  width: 100px;
-  height: auto;
-  border-radius: 5px;
-}
   </style>
 </head>
 <body>
