@@ -467,6 +467,11 @@
       <div>
         <strong>${habit.name} (${habit.time} min):</strong>
         <p>${habit.description}</p>
+        ${
+          habit.multiTaskWith 
+          ? `<p class="multitask">In the meantime: <strong>${habit.multiTaskWith}</strong></p>` 
+          : ""
+        }
       </div>
     `;
 
