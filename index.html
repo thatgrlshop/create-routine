@@ -141,51 +141,235 @@
   <script>
     const habits = [
   // Wellness
-  { name: "Sunshine exposure", time: [5, 10, 15], category: "wellness", multiTask: true,
-  img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
-    description: "Expose yourself to sunlight to boost vitamin D levels."
+  { 
+    name: "Sunshine exposure", 
+    time: [5, 10, 15], 
+    category: "wellness", 
+    multiTask: true,
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Expose yourself to sunlight to boost vitamin D levels and mood."
   },
-  { name: "Bouncing", time: [2], category: "wellness",
-   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
-    description: "Expose yourself to sunlight to boost vitamin D levels."
+  { 
+    name: "Bouncing", 
+    time: [2], 
+    category: "wellness",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Light bouncing helps improve lymphatic flow and energy."
   },
+  { 
+    name: "Legs on the wall", 
+    time: [5, 10], 
+    category: "wellness",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Relaxes the legs, improves circulation, and reduces swelling."
   },
-  { name: "Legs on the wall", time: [5, 10], category: "wellness" },
-  { name: "Posture exercises", time: [12], category: "wellness" },
-  { name: "Stomach vacuum", time: [2], category: "wellness" },
-  { name: "Stretching", time: [5, 10], category: "wellness" },
-  { name: "Workout", time: [30], category: "wellness", postHabit: "Wash body" },
-  { name: "HIIT workout", time: [10], category: "wellness", postHabit: "Wash body" },
+  { 
+    name: "Posture exercises", 
+    time: [12], 
+    category: "wellness",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Align your spine and improve posture for better health."
+  },
+  { 
+    name: "Stomach vacuum", 
+    time: [2], 
+    category: "wellness",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Strengthens core muscles and supports better posture."
+  },
+  { 
+    name: "Stretching", 
+    time: [5, 10], 
+    category: "wellness",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Loosens tight muscles and enhances flexibility."
+  },
+  { 
+    name: "Workout", 
+    time: [30], 
+    category: "wellness", 
+    postHabit: "Wash body",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Strengthen your body and boost energy with a full-body workout."
+  },
+  { 
+    name: "HIIT workout", 
+    time: [10], 
+    category: "wellness", 
+    postHabit: "Wash body",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Short, intense bursts of exercise for maximum calorie burn."
+  },
 
   // Nutrition
-  { name: "Drink lemon water", time: [2], category: "nutrition" },
-  { name: "Green smoothie", time: [10], category: "nutrition" },
-  { name: "Herbal tea", time: [10], category: "nutrition" },
-  { name: "Eat a fruit", time: [5], category: "nutrition" },
-  { name: "Meal prep", time: [15], category: "nutrition" },
+  { 
+    name: "Drink lemon water", 
+    time: [2], 
+    category: "nutrition",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Hydrate your body and support digestion with lemon water."
+  },
+  { 
+    name: "Green smoothie", 
+    time: [10], 
+    category: "nutrition",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Boost your nutrients with a healthy green smoothie."
+  },
+  { 
+    name: "Herbal tea", 
+    time: [10], 
+    category: "nutrition",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Relax and enjoy the antioxidants in herbal tea."
+  },
+  { 
+    name: "Eat a fruit", 
+    time: [5], 
+    category: "nutrition",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Snack on fruit to boost energy and vitamins."
+  },
+  { 
+    name: "Meal prep", 
+    time: [15], 
+    category: "nutrition",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Prepare healthy meals for the week to save time."
+  },
 
   // Self-care
-  { name: "Oil pulling", time: [10, 15], category: "self-care", multiTask: true },
-  { name: "Shower", time: [20], category: "self-care", autoAdd: true },
-  { name: "Wash body", time: [10], category: "self-care", autoAdd: true },
-  { name: "Scalp massage", time: [10], category: "self-care" },
-  { name: "Skincare", time: [5, 10], category: "self-care" },
+  { 
+    name: "Oil pulling", 
+    time: [10, 15], 
+    category: "self-care", 
+    multiTask: true,
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Detoxify your mouth and improve oral hygiene."
+  },
+  { 
+    name: "Shower", 
+    time: [20], 
+    category: "self-care", 
+    autoAdd: true,
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Refresh and cleanse your body with a warm shower."
+  },
+  { 
+    name: "Wash body", 
+    time: [10], 
+    category: "self-care", 
+    autoAdd: true,
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Cleanse your skin to feel fresh and revitalized."
+  },
+  { 
+    name: "Scalp massage", 
+    time: [10], 
+    category: "self-care",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Stimulate hair growth and relax with a scalp massage."
+  },
+  { 
+    name: "Skincare", 
+    time: [5, 10], 
+    category: "self-care",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Nourish and protect your skin with a tailored routine."
+  },
 
   // Beauty
-  { name: "Hair mask", time: [15, 20], category: "beauty", postHabit: "Shower", multiTask: true },
-  { name: "Face mask", time: [10, 15], category: "beauty", multiTask: true },
-  { name: "Face scrub", time: [5], category: "beauty", preHabit: "Shower" },
-  { name: "Body scrub", time: [5], category: "beauty", preHabit: "Shower" },
-  { name: "Tweeze eyebrows", time: [5, 10], category: "beauty" },
-  { name: "Manicure", time: [10], category: "beauty" },
-  { name: "Pedicure", time: [10], category: "beauty" },
+  { 
+    name: "Hair mask", 
+    time: [15, 20], 
+    category: "beauty", 
+    postHabit: "Shower", 
+    multiTask: true,
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Deep condition your hair for added shine and strength."
+  },
+  { 
+    name: "Face mask", 
+    time: [10, 15], 
+    category: "beauty", 
+    multiTask: true,
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Rejuvenate and hydrate your skin with a face mask."
+  },
+  { 
+    name: "Face scrub", 
+    time: [5], 
+    category: "beauty", 
+    preHabit: "Shower",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Exfoliate your skin for a smooth and glowing complexion."
+  },
+  { 
+    name: "Body scrub", 
+    time: [5], 
+    category: "beauty", 
+    preHabit: "Shower",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Gently exfoliate your body to remove dead skin cells."
+  },
+  { 
+    name: "Tweeze eyebrows", 
+    time: [5, 10], 
+    category: "beauty",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Shape your eyebrows for a polished look."
+  },
+  { 
+    name: "Manicure", 
+    time: [10], 
+    category: "beauty",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Care for and polish your nails for a neat appearance."
+  },
+  { 
+    name: "Pedicure", 
+    time: [10], 
+    category: "beauty",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Relax and groom your feet for a fresh feeling."
+  },
 
   // Personal Development
-  { name: "Meditation", time: [10, 30], category: "personal-dev" },
-  { name: "Journaling", time: [15], category: "personal-dev" },
-  { name: "Reading", time: [10, 15], category: "personal-dev" },
-  { name: "Learn a new skill", time: [15], category: "personal-dev" },
-  { name: "Prepare outfit", time: [10], category: "personal-dev" },
+  { 
+    name: "Meditation", 
+    time: [10, 30], 
+    category: "personal-dev",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Calm your mind and improve focus with meditation."
+  },
+  { 
+    name: "Journaling", 
+    time: [15], 
+    category: "personal-dev",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Reflect and set goals through writing."
+  },
+  { 
+    name: "Reading", 
+    time: [10, 15], 
+    category: "personal-dev",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Expand your knowledge and relax with a good book."
+  },
+  { 
+    name: "Learn a new skill", 
+    time: [15], 
+    category: "personal-dev",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Improve yourself by dedicating time to a new skill."
+  },
+  { 
+    name: "Prepare outfit", 
+    time: [10], 
+    category: "personal-dev",
+    img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Plan your outfit for a confident start to the day."
+  },
 ];
 
     const multitaskRules = {
