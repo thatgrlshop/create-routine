@@ -78,6 +78,21 @@
       color: #666;
       margin-top: 5px;
     }
+    .result-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Spazio tra immagine e testo */
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.result-list img {
+  width: 50px;
+  height: auto;
+  border-radius: 5px;
+}
   </style>
 </head>
 <body>
@@ -126,8 +141,15 @@
   <script>
     const habits = [
   // Wellness
-  { name: "Sunshine exposure", time: [5, 10, 15], category: "wellness", multiTask: true },
-  { name: "Bouncing", time: [2], category: "wellness" },
+  { name: "Sunshine exposure", time: [5, 10, 15], category: "wellness", multiTask: true,
+  img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Expose yourself to sunlight to boost vitamin D levels."
+  },
+  { name: "Bouncing", time: [2], category: "wellness",
+   img: "https://i.ibb.co/bQXRHZ8/IMG-8583.jpg", 
+    description: "Expose yourself to sunlight to boost vitamin D levels."
+  },
+  },
   { name: "Legs on the wall", time: [5, 10], category: "wellness" },
   { name: "Posture exercises", time: [12], category: "wellness" },
   { name: "Stomach vacuum", time: [2], category: "wellness" },
@@ -215,7 +237,12 @@
     const habit = filteredHabits.splice(Math.floor(Math.random() * filteredHabits.length), 1)[0];
     const habitTime = habit.time.find(t => t <= timeLeft);
     if (habitTime) {
-      routine.push({ name: habit.name, time: habitTime });
+      routine.push({ 
+        name: habit.name, 
+        time: habitTime, 
+        img: habit.img, 
+        description: habit.description 
+      });
       timeLeft -= habitTime;
 
       // Handle multitasking
@@ -231,7 +258,12 @@
       if (habit.name === "Hair mask") {
         const postHabit = habits.find(h => h.name === "Shower");
         if (postHabit && !routine.some(r => r.name === postHabit.name)) {
-          routine.push({ name: postHabit.name, time: postHabit.time[0] });
+          routine.push({ 
+            name: postHabit.name, 
+            time: postHabit.time[0], 
+            img: postHabit.img, 
+            description: postHabit.description 
+          });
           timeLeft -= postHabit.time[0];
         }
       }
@@ -242,19 +274,26 @@
 
     function displayRoutine() {
   const routineList = document.getElementById("routine-list");
-  routineList.innerHTML = "";
+  routineList.innerHTML = ""; // Pulisce la lista esistente
+
   routine.forEach((habit, index) => {
     const li = document.createElement("li");
-    li.innerHTML = `${habit.name} - ${habit.time} min` +
-      (habit.multiTaskWith ? `<div class="multitask">In the meantime: ${habit.multiTaskWith}</div>` : "");
-    
-    // Highlight the current habit in bold
+    li.innerHTML = `
+      <img src="${habit.img}" alt="${habit.name}" style="width: 50px; height: auto; border-radius: 5px; margin-right: 10px;">
+      <div>
+        <strong>${habit.name} (${habit.time} min):</strong>
+        <p>${habit.description}</p>
+      </div>
+    `;
+
+    // Evidenzia la habit corrente in grassetto
     if (index === currentHabitIndex) {
       li.style.fontWeight = "bold";
     }
 
     routineList.appendChild(li);
   });
+
   if (routine.length === 0) {
     routineList.innerHTML = "<li>No routine available. Please adjust your preferences or time selection.</li>";
   }
